@@ -1,0 +1,13 @@
+g:\ripple\ripple.obj
+
+-lib d:\hc386\small\snd
+-lib d:\hc386\small\tbios
+-lib d:\hc386\small\hce
+-lib d:\hc386\small\na
+-lib d:\hc386\small\tifflib
+-TWOCASE
+-stack 65536
+-80386
+-exe ripple.exp
+
+
