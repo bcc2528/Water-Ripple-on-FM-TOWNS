@@ -3,6 +3,7 @@ Water Ripple Demo on FM TOWNS
 
 
 486DX2 66MHz以上搭載白TOWNS推奨
+
 RIPPLE.TIFとRIPPLE.EXPを同一ディレクトリに入れてEXPを実行。
 
 マウスを左クリックすると画像に波紋が広がって歪んでいく。しばらくすれば波紋が収まる。マウスを動かせば波紋の作成位置を変更。
