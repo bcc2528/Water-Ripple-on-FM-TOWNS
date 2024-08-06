@@ -66,7 +66,7 @@ void newframe()
 	int i;
 	int a;
 	int b;
-	int mapIdx;
+	short *rippleMap_Idx;
 	short data;
 
 	// Store indexes - old and new may be misleading/confusing
@@ -78,7 +78,7 @@ void newframe()
 
 	// Initialize the looping values - each will be incremented
 	i = 0;
-	mapIdx = oldIdx;
+	rippleMap_Idx = &rippleMap[oldIdx];
 
 	//for (int y = 0; y < HEIGHT_RIPPLE ; y++)
 	//optimized
@@ -91,10 +91,10 @@ void newframe()
 			// Use rippleMap to set data value, mapIdx = oldIdx
 			// Use averaged values of pixels: above, below, left and right of current
 			data = (
-				rippleMap[mapIdx  - WIDTH_RIPPLE ] +
-				rippleMap[mapIdx  + WIDTH_RIPPLE ] +
-				rippleMap[mapIdx  - 1] +
-				rippleMap[mapIdx  + 1]
+				rippleMap_Idx[-WIDTH_RIPPLE] +
+				rippleMap_Idx[WIDTH_RIPPLE] +
+				rippleMap_Idx[-1] +
+				rippleMap_Idx[1]
 				) >> 1;    // right shift 1 is same as divide by 2
 
 			// Subtract 'previous' value (we are about to overwrite rippleMap[newIdx+i])
@@ -133,7 +133,7 @@ void newframe()
 			}
 			lastMap[i] = data;
 
-			mapIdx++;
+			rippleMap_Idx++;
 			i++;
 		}
 	}
