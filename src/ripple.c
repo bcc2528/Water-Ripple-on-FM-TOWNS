@@ -35,21 +35,27 @@ unsigned short *ripple;
 
 void dropAt(int dx, int dy)
 {
+	int i, j, k;
+
 	// Make certain dx and dy are integers
 	// Shifting left 0 is slightly faster than parseInt and math.* (or used to be)
 	dx <<= 0;
 	dy <<= 0;
 
 	// Our ripple effect area is actually a square, not a circle
-	for (int j = dy - RIPPLE_RAD ; j < dy + RIPPLE_RAD ; j++)
-	{
-		for (int k = dx - RIPPLE_RAD ; k < dx + RIPPLE_RAD ; k++)
-		{
-			int i = oldIdx + (j * WIDTH_RIPPLE ) + k;
+	j = dy - RIPPLE_RAD;
+	do {
+		k = dx - RIPPLE_RAD;
+		do {
+			i = oldIdx + (j * WIDTH_RIPPLE ) + k;
 			if(i < size && i >= 0)
 			rippleMap[i] += 512;
-		}
-	}
+
+			k++;
+		} while(k < dx + RIPPLE_RAD);
+
+		j++;
+	} while(j < dy + RIPPLE_RAD);
 }
 
 void dropReset()
@@ -64,8 +70,8 @@ void dropReset()
 void newframe()
 {
 	int i;
-	int a;
-	int b;
+	int x;
+	int y;
 	short *rippleMap_Idx;
 	short data;
 
@@ -82,11 +88,13 @@ void newframe()
 
 	//for (int y = 0; y < HEIGHT_RIPPLE ; y++)
 	//optimized
-	for (int y = -HALF_HEIGHT_RIPPLE; y < HALF_HEIGHT_RIPPLE ; y++)
+	y = -HALF_HEIGHT_RIPPLE;
+	do
 	{
 		//for (int x = 0; x < WIDTH_RIPPLE ; x++)
 		//optimized
-		for (int x = -HALF_WIDTH_RIPPLE; x < HALF_WIDTH_RIPPLE ; x++)
+		x = -HALF_WIDTH_RIPPLE;
+		do
 		{
 			// Use rippleMap to set data value, mapIdx = oldIdx
 			// Use averaged values of pixels: above, below, left and right of current
@@ -135,8 +143,10 @@ void newframe()
 
 			rippleMap_Idx++;
 			i++;
-		}
-	}
+			x++;
+		}while( x < HALF_WIDTH_RIPPLE);
+		y++;
+	}while(y < HALF_HEIGHT_RIPPLE);
 }
 
 void end_ripple()
@@ -153,7 +163,7 @@ void end_ripple()
 	free(mwork);
 }
 
-int x,y ;
+int x,y;
 
 void setup()
 {
@@ -270,7 +280,7 @@ int main(int argc, char* argv[])
 
 	setup();
 
-	while(1)
+	do
 	{
 		newframe();
 		draw_ripple();
@@ -282,13 +292,9 @@ int main(int argc, char* argv[])
 		}
 		if((button & 2) == 2)
 		{
-			dropReset(x,y);
+			dropReset();
 		}
-		if((button & 3) == 3)
-		{
-			break;
-		}
-	}
+	} while((button & 3) != 3);
 
 	end_ripple();
 
